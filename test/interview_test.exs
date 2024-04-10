@@ -6,9 +6,14 @@ defmodule InterviewTest do
     assert Interview.render("",%{}) == ""
   end
 
+  test "no replace" do
+    assert Interview.render("hello world", %{key: "nothing"}) == "hello world"
+  end
+
   test "with key" do
     assert Interview.render("some {{key}}", %{key: "foo"}) == "some foo"
   end
+
   test "duplicate keys" do
     assert Interview. render("{{key}} and {{key}}", %{key: "foo"}) == "foo and foo"
   end
