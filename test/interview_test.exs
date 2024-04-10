@@ -3,7 +3,7 @@ defmodule InterviewTest do
   doctest Interview
 
   test "nothing" do
-    assert Interview.render("",%{}) == ""
+    assert Interview.render("", %{}) == ""
   end
 
   test "no replace" do
@@ -15,7 +15,7 @@ defmodule InterviewTest do
   end
 
   test "duplicate keys" do
-    assert Interview. render("{{key}} and {{key}}", %{key: "foo"}) == "foo and foo"
+    assert Interview.render("{{key}} and {{key}}", %{key: "foo"}) == "foo and foo"
   end
 
   test "blank for missing key" do
@@ -23,10 +23,16 @@ defmodule InterviewTest do
   end
 
   test "full template text" do
-    assert Interview.render("field1: {{foo}}, {{bar}}, {{baz}}", %{foo: "{{foo}}", bar: "this is bar"}) == "field1: {{foo}}, this is bar, "
+    assert Interview.render("field1: {{foo}}, {{bar}}, {{baz}}", %{
+             foo: "{{foo}}",
+             bar: "this is bar"
+           }) == "field1: {{foo}}, this is bar, "
   end
 
   test "compound key template text" do
-    assert Interview.render("field1: {{foo.bar}}, {{bar}}, {{baz}}", %{foo: %{bar: "text"}, bar: "this is bar"}) == "field1: text, this is bar, "
+    assert Interview.render("field1: {{foo.bar}}, {{bar}}, {{baz}}", %{
+             foo: %{bar: "text"},
+             bar: "this is bar"
+           }) == "field1: text, this is bar, "
   end
 end

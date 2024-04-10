@@ -22,11 +22,13 @@ defmodule Interview do
   """
   @spec render(String.t(), %{atom() => value_or_nested_map()}) :: String.t()
   def render("", _params), do: ""
+
   def render(template, params) do
     do_render(template, params, "")
   end
 
   defp do_render("", _params, acc), do: acc
+
   defp do_render(@opening_delimiter <> rest, params, acc) do
     {key, rest} = split_at_closing_delimiter(rest)
 
@@ -37,23 +39,24 @@ defmodule Interview do
 
     do_render(rest, params, acc <> replace)
   end
-  defp do_render(<<c :: binary-size(1), rest :: binary>>, params, acc) do
+
+  defp do_render(<<c::binary-size(1), rest::binary>>, params, acc) do
     do_render(rest, params, acc <> c)
   end
-
 
   defp split_at_closing_delimiter(template), do: do_split_at_closing_delimiter(template, "")
 
   defp do_split_at_closing_delimiter("", acc_key) do
     {parse_key(acc_key), ""}
   end
+
   defp do_split_at_closing_delimiter(@closing_delimiter <> rest, acc_key) do
     {parse_key(acc_key), rest}
   end
-  defp do_split_at_closing_delimiter(<<c :: binary-size(1), rest :: binary>>, acc_key) do
+
+  defp do_split_at_closing_delimiter(<<c::binary-size(1), rest::binary>>, acc_key) do
     do_split_at_closing_delimiter(rest, acc_key <> c)
   end
-
 
   # Parses key into the `Access` behaviour's nested-key list access.
   defp parse_key(key) do
